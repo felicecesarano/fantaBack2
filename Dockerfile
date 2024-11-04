@@ -16,6 +16,9 @@ FROM openjdk:17-jdk-slim
 
 # Copia l'applicazione costruita dall'immagine precedente
 COPY --from=build /app/target/*.jar app.jar
+# Copia il file env.properties nel contenitore
+COPY env.properties ./env.properties
+
 
 # Comando per avviare l'applicazione
 ENTRYPOINT ["java", "-jar", "/app.jar"]
