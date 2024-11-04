@@ -5,7 +5,7 @@ FROM maven:3.8.6-openjdk-17 AS build
 WORKDIR /app
 
 # Copia i file di pom.xml e il codice sorgente
-COPY pom.xml .
+COPY pom.xml ./
 COPY src ./src
 
 # Esegui la build
