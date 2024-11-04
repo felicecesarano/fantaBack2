@@ -13,7 +13,7 @@ import java.util.Map;
 @Service
 public class StripeService {
 
-    @Value("${env.stripe.secret.key}")
+    @Value("${stripe.secret.key}")
     private String apiKey;
 
     @PostConstruct
