@@ -23,8 +23,8 @@ public class PaymentController {
             // Crea la sessione di checkout di Stripe
             SessionCreateParams.Builder builder = SessionCreateParams.builder()
                     .setMode(SessionCreateParams.Mode.PAYMENT)
-                    .setSuccessUrl("http://localhost:4200/success?session_id{CHECKOUT_SESSION_ID}")
-                    .setCancelUrl("http://localhost:4200/cancel")
+                    .setSuccessUrl("http://fantaparcodeiprincipi-51ffd.web.app/success?session_id{CHECKOUT_SESSION_ID}")
+                    .setCancelUrl("http://fantaparcodeiprincipi-51ffd.web.app/cancel")
                     .addLineItem(SessionCreateParams.LineItem.builder()
                             .setQuantity(1L)
                             .setPriceData(SessionCreateParams.LineItem.PriceData.builder()
