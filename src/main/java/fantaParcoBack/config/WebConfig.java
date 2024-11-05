@@ -1,4 +1,4 @@
-package fantaParcoBack.config; // Assicurati che il package sia corretto
+package fantaParcoBack.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,7 +10,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins( "https://fantaparcodeiprincipi-51ffd.web.app")
+                .allowedOrigins("https://fantaparcodeiprincipi-51ffd.web.app", "https://fantaback2.onrender.com")
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
                 .allowCredentials(true);
