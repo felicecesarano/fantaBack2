@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 public class JwtTokenProvider {
 
     // Usa un valore di fallback se la variabile d'ambiente non è impostata
-    private static final String SECRET_KEY = System.getenv("JWT_SECRET_KEY") != null ? System.getenv("JWT_SECRET_KEY") : "defaultSecretKey";
+    private static final String SECRET_KEY = System.getenv("jwt.secret") != null ? System.getenv("jwt.secret") : "defaultSecretKey";
 
     // Crea un token JWT
     public String createToken(String username, List<String> roles) {
