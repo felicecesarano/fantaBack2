@@ -1,5 +1,6 @@
 package fantaParcoBack.security;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -34,19 +35,46 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
 
-        // Logica JWT standard
+        // Estrai il token JWT dall'header Authorization
         String token = request.getHeader("Authorization");
+
         if (token != null && token.startsWith("Bearer ")) {
-            token = token.substring(7);
+            token = token.substring(7); // Rimuove il prefisso "Bearer "
+
+            // Verifica la validità del token
             if (jwtTokenProvider.validateToken(token)) {
                 String username = jwtTokenProvider.getUsernameFromToken(token);
                 List<SimpleGrantedAuthority> authorities = jwtTokenProvider.getAuthoritiesFromToken(token);
-                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(username, null, authorities);
+
+                if (authorities.isEmpty()) {
+                    // Logica di fallimento se le autorità sono vuote
+                    response.setStatus(HttpStatus.FORBIDDEN.value());
+                    response.getWriter().write("Accesso non autorizzato, ruoli mancanti o insufficienti.");
+                    return;
+                }
+
+                // Crea un oggetto di autenticazione con le autorità estratte
+                UsernamePasswordAuthenticationToken authentication =
+                        new UsernamePasswordAuthenticationToken(username, null, authorities);
+
+                // Imposta l'autenticazione nel contesto di sicurezza
                 SecurityContextHolder.getContext().setAuthentication(authentication);
+            } else {
+                // Token non valido o scaduto
+                response.setStatus(HttpStatus.FORBIDDEN.value());
+                response.getWriter().write("Token JWT non valido o scaduto.");
+                return;
             }
+        } else if (token == null || !token.startsWith("Bearer ")) {
+            // Token mancante o formato non valido
+            response.setStatus(HttpStatus.FORBIDDEN.value());
+            response.getWriter().write("Token JWT mancante o con prefisso errato.");
+            return;
         }
 
+        // Continua con la catena di filtri
         filterChain.doFilter(request, response);
     }
+
 
 }

@@ -66,7 +66,8 @@ public class JwtTokenProvider {
     public List<SimpleGrantedAuthority> getAuthoritiesFromToken(String token) {
         List<String> roles = getRolesFromToken(token); // Estrai i ruoli dal token
         return roles.stream()
-                .map(role -> new SimpleGrantedAuthority("ROLE_" + role)) // Aggiungi il prefisso "ROLE_" per seguire la convenzione di Spring Security
+                .map(role -> new SimpleGrantedAuthority("ROLE_" + role)) // Prefisso "ROLE_"
                 .collect(Collectors.toList());
     }
+
 }
