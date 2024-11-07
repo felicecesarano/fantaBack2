@@ -9,7 +9,7 @@ import fantaParcoBack.service.StripeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import fantaParcoBack.service.ClientService;  // Assicurati di usare il percorso corretto
+
 
 
 import java.util.HashMap;
@@ -32,10 +32,7 @@ public class EightBlackController {
     @Autowired
     private EightBlackService eightBlackService;
 
-    @Autowired
-    private ClientService clientService;
-
-
+    
     // Endpoint per ottenere tutti i clienti
     @GetMapping("/clients")
     public ResponseEntity<List<EightBlack>> getAllClient() {
