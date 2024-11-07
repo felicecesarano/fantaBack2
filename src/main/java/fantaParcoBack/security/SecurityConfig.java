@@ -26,7 +26,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/eight-black/**").permitAll() // Permetti l'accesso pubblico alle rotte di Eight Black
                 .requestMatchers("/api/fanta-eight-black/**").permitAll() // Permetti l'accesso pubblico alle rotte di FantaEightBlack
                 .requestMatchers("/api/fanta-parco/**").permitAll() // Permetti l'accesso pubblico alle rotte di FantaParco
-                .requestMatchers("/login").permitAll() // Permetti l'accesso pubblico alla rotta di login
+                .requestMatchers("/api/login").permitAll() // Permetti l'accesso pubblico alla rotta di login
                 .requestMatchers("/table/**").authenticated() // Proteggi la rotta /table
                 .anyRequest().authenticated(); // Tutte le altre rotte richiedono autenticazione
 
