@@ -32,7 +32,7 @@ public class EightBlackController {
     @Autowired
     private EightBlackService eightBlackService;
 
-    
+
     // Endpoint per ottenere tutti i clienti
     @GetMapping("/clients")
     public ResponseEntity<List<EightBlack>> getAllClient() {

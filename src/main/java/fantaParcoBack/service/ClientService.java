@@ -6,13 +6,13 @@ import fantaParcoBack.entity.FantaParco;
 import fantaParcoBack.repository.EightBlackRepository;
 import fantaParcoBack.repository.FantaEightBlackRepository;
 import fantaParcoBack.repository.FantaParcoRepository;
-import org.jvnet.hk2.annotations.Service;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service; // Importa correttamente @Service di Spring
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Service
+@Service // Usa l'annotazione corretta di Spring
 public class ClientService {
 
     @Autowired
