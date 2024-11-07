@@ -26,27 +26,27 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        // Estrai il token JWT dall'header Authorization
+        String path = request.getRequestURI();
+
+        // Salta l'autenticazione per l'endpoint /api/login
+        if ("/api/login".equals(path)) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        // Logica JWT standard
         String token = request.getHeader("Authorization");
-
-        // Se il token è presente e valido
         if (token != null && token.startsWith("Bearer ")) {
-            token = token.substring(7); // Rimuove il prefisso "Bearer "
-
+            token = token.substring(7);
             if (jwtTokenProvider.validateToken(token)) {
                 String username = jwtTokenProvider.getUsernameFromToken(token);
                 List<SimpleGrantedAuthority> authorities = jwtTokenProvider.getAuthoritiesFromToken(token);
-
-                // Crea un oggetto di autenticazione con i ruoli
-                UsernamePasswordAuthenticationToken authentication =
-                        new UsernamePasswordAuthenticationToken(username, null, authorities);
-
-                // Imposta l'autenticazione nel contesto di sicurezza
+                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(username, null, authorities);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         }
 
-        // Continua con la catena di filtri
         filterChain.doFilter(request, response);
     }
+
 }
