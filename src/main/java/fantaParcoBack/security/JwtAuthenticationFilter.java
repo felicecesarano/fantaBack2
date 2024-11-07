@@ -1,16 +1,22 @@
 package fantaParcoBack.security;
 
-import jakarta.servlet.Filter;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.filter.OncePerRequestFilter;
+
 import jakarta.servlet.FilterChain;
-import jakarta.servlet.FilterConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
 
-@WebFilter("/*") // Filtro applicato a tutte le richieste
-public class JwtAuthenticationFilter implements Filter {
+import java.util.List;
+
+@WebFilter("/*") // Applica il filtro a tutte le richieste
+public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtTokenProvider jwtTokenProvider;
 
@@ -19,24 +25,28 @@ public class JwtAuthenticationFilter implements Filter {
     }
 
     @Override
-    public void doFilter(jakarta.servlet.ServletRequest request, jakarta.servlet.ServletResponse response, FilterChain chain)
-            throws IOException, ServletException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        // Estrai il token JWT dall'header Authorization
+        String token = request.getHeader("Authorization");
 
-        HttpServletRequest httpRequest = (HttpServletRequest) request;
-        String token = httpRequest.getHeader("Authorization");
+        // Se il token è presente e valido
+        if (token != null && token.startsWith("Bearer ")) {
+            token = token.substring(7); // Rimuove il prefisso "Bearer "
 
-        if (token != null && jwtTokenProvider.validateToken(token)) {
-            String username = jwtTokenProvider.getUsernameFromToken(token);
-            // Imposta il contesto di sicurezza con l'utente autenticato
-            // (questo passaggio dipende dalle tue necessità, ad esempio con Spring Security puoi usarlo per autenticare l'utente)
+            if (jwtTokenProvider.validateToken(token)) {
+                String username = jwtTokenProvider.getUsernameFromToken(token);
+                List<SimpleGrantedAuthority> authorities = jwtTokenProvider.getAuthoritiesFromToken(token);
+
+                // Crea un oggetto di autenticazione con i ruoli
+                UsernamePasswordAuthenticationToken authentication =
+                        new UsernamePasswordAuthenticationToken(username, null, authorities);
+
+                // Imposta l'autenticazione nel contesto di sicurezza
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            }
         }
 
-        chain.doFilter(request, response); // Procedi con la richiesta
+        // Continua con la catena di filtri
+        filterChain.doFilter(request, response);
     }
-
-    @Override
-    public void init(FilterConfig filterConfig) throws ServletException {}
-
-    @Override
-    public void destroy() {}
 }

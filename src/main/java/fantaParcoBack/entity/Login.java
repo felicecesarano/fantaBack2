@@ -4,16 +4,13 @@ public class Login {
     private String username;
     private String password;
 
-    // Costruttore vuoto
-    public Login() {}
-
-    // Costruttore con parametri
+    // Costruttore con 2 parametri
     public Login(String username, String password) {
         this.username = username;
         this.password = password;
     }
 
-    // Getter e Setter per username
+    // Getter e setter per username e password
     public String getUsername() {
         return username;
     }
@@ -22,7 +19,6 @@ public class Login {
         this.username = username;
     }
 
-    // Getter e Setter per password
     public String getPassword() {
         return password;
     }
