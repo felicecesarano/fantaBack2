@@ -21,6 +21,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtTokenProvider jwtTokenProvider;
 
+    // Endpoint protetti
+    private static final List<String> PROTECTED_URLS = List.of(
+            "/api/eight-black/clients",
+            "/api/eight-black/search",
+            "/api/fanta-eight-black/clients",
+            "/api/fanta-eight-black/search",
+            "/api/fanta-parco/clients",
+            "/api/fanta-parco/search",
+            "/api/clients"
+    );
+
     public JwtAuthenticationFilter(JwtTokenProvider jwtTokenProvider) {
         this.jwtTokenProvider = jwtTokenProvider;
     }
@@ -29,52 +40,48 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String path = request.getRequestURI();
 
-        // Salta l'autenticazione per l'endpoint /api/login
-        if ("/api/login".equals(path)) {
-            filterChain.doFilter(request, response);
-            return;
-        }
+        // Verifica se l'endpoint è uno di quelli da proteggere
+        if (isProtectedUrl(path)) {
+            // Estrai il token JWT dall'header Authorization
+            String token = request.getHeader("Authorization");
 
-        // Estrai il token JWT dall'header Authorization
-        String token = request.getHeader("Authorization");
+            if (token != null && token.startsWith("Bearer ")) {
+                token = token.substring(7); // Rimuove il prefisso "Bearer "
 
-        if (token != null && token.startsWith("Bearer ")) {
-            token = token.substring(7); // Rimuove il prefisso "Bearer "
+                // Verifica la validità del token
+                if (jwtTokenProvider.validateToken(token)) {
+                    String username = jwtTokenProvider.getUsernameFromToken(token);
+                    List<SimpleGrantedAuthority> authorities = jwtTokenProvider.getAuthoritiesFromToken(token);
 
-            // Verifica la validità del token
-            if (jwtTokenProvider.validateToken(token)) {
-                String username = jwtTokenProvider.getUsernameFromToken(token);
-                List<SimpleGrantedAuthority> authorities = jwtTokenProvider.getAuthoritiesFromToken(token);
+                    if (authorities.isEmpty()) {
+                        response.setStatus(HttpStatus.FORBIDDEN.value());
+                        response.getWriter().write("Accesso non autorizzato, ruoli mancanti o insufficienti.");
+                        return;
+                    }
 
-                if (authorities.isEmpty()) {
-                    // Logica di fallimento se le autorità sono vuote
+                    UsernamePasswordAuthenticationToken authentication =
+                            new UsernamePasswordAuthenticationToken(username, null, authorities);
+
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                } else {
                     response.setStatus(HttpStatus.FORBIDDEN.value());
-                    response.getWriter().write("Accesso non autorizzato, ruoli mancanti o insufficienti.");
+                    response.getWriter().write("Token JWT non valido o scaduto.");
                     return;
                 }
-
-                // Crea un oggetto di autenticazione con le autorità estratte
-                UsernamePasswordAuthenticationToken authentication =
-                        new UsernamePasswordAuthenticationToken(username, null, authorities);
-
-                // Imposta l'autenticazione nel contesto di sicurezza
-                SecurityContextHolder.getContext().setAuthentication(authentication);
             } else {
-                // Token non valido o scaduto
                 response.setStatus(HttpStatus.FORBIDDEN.value());
-                response.getWriter().write("Token JWT non valido o scaduto.");
+                response.getWriter().write("Token JWT mancante o con prefisso errato.");
                 return;
             }
-        } else if (token == null || !token.startsWith("Bearer ")) {
-            // Token mancante o formato non valido
-            response.setStatus(HttpStatus.FORBIDDEN.value());
-            response.getWriter().write("Token JWT mancante o con prefisso errato.");
-            return;
         }
 
-        // Continua con la catena di filtri
+        // Continua con la catena di filtri per altre richieste
         filterChain.doFilter(request, response);
     }
 
-
+    // Verifica se l'URL è tra quelli protetti
+    private boolean isProtectedUrl(String path) {
+        return PROTECTED_URLS.stream().anyMatch(path::startsWith);
+    }
 }
+

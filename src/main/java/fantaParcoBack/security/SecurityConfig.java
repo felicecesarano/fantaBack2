@@ -13,6 +13,7 @@ public class SecurityConfig {
 
     private final JwtTokenProvider jwtTokenProvider;
 
+    // Costruttore
     public SecurityConfig(JwtTokenProvider jwtTokenProvider) {
         this.jwtTokenProvider = jwtTokenProvider;
     }
@@ -22,12 +23,17 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable()) // Disabilita CSRF (necessario in caso di utilizzo di JWT)
                 .authorizeRequests()
-                .requestMatchers("/api/eight-black/**").permitAll() // Permetti l'accesso pubblico alle rotte di Eight Black
-                .requestMatchers("/api/fanta-eight-black/**").permitAll() // Permetti l'accesso pubblico alle rotte di FantaEightBlack
-                .requestMatchers("/api/fanta-parco/**").permitAll() // Permetti l'accesso pubblico alle rotte di FantaParco
-                .requestMatchers("/api/login").permitAll() // Permetti l'accesso pubblico alla rotta di login
-                .requestMatchers("/table/**").authenticated() // Proteggi la rotta /table, richiede autenticazione
-                .anyRequest().permitAll(); // Tutte le altre rotte possono essere accessibili senza autenticazione
+                // Endpoint pubblici senza autenticazione JWT
+                .requestMatchers("/api/eight-black/**", "/api/fanta-eight-black/**",
+                        "/api/fanta-parco/**", "/api/login", "/api/check-email/**")
+                .permitAll() // Consenti accesso senza autenticazione JWT a questi endpoint
+                // Endpoint protetti che richiedono l'autenticazione JWT
+                .requestMatchers("/table/**", "/api/clients/**", "/api/eight-black/clients",
+                        "/api/eight-black/search", "/api/fanta-eight-black/clients",
+                        "/api/fanta-eight-black/search", "/api/fanta-parco/clients",
+                        "/api/fanta-parco/search")
+                .authenticated() // Richiedono autenticazione JWT
+                .anyRequest().permitAll(); // Altri endpoint sono pubblici, se necessario
 
         // Aggiungi il filtro JWT prima di UsernamePasswordAuthenticationFilter
         http.addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
