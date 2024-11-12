@@ -1,9 +1,7 @@
 package fantaParcoBack.service;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Service;
 
-@Service
 public class GenericService<T, ID> {
 
     private final JpaRepository<T, ID> repository;
