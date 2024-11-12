@@ -12,6 +12,7 @@ import fantaParcoBack.service.FantaEightBlackService;
 import fantaParcoBack.service.GenericService;
 import fantaParcoBack.service.StripeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,10 +38,11 @@ public class FantaEightBlackController {
 
     @Autowired
     private FantaEightBlackService fantaEightBlackService;
+
     private final GenericService<FantaEightBlack, Long> genericService;
 
     @Autowired
-    public FantaEightBlackController(FantaEightBlackRepository fantaEightBlackRepository) {
+    public FantaEightBlackController(@Qualifier("fantaEightBlackRepository") FantaEightBlackRepository fantaEightBlackRepository) {
         this.genericService = new GenericService<>(fantaEightBlackRepository);
     }
 
@@ -53,6 +55,7 @@ public class FantaEightBlackController {
             return ResponseEntity.status(404).body("Errore: " + e.getMessage());
         }
     }
+
     @GetMapping("/clients")
     public ResponseEntity<List<FantaEightBlack>> getAllClients() {
         List<FantaEightBlack> clients = fantaEightBlackService.getAllClients();

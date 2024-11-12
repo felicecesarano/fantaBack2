@@ -10,6 +10,7 @@ import fantaParcoBack.service.FantaParcoService;
 import fantaParcoBack.service.GenericService;
 import fantaParcoBack.service.StripeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,7 +37,7 @@ public class FantaParcoController {
     private final GenericService<FantaParco, Long> genericService;
 
     @Autowired
-    public FantaParcoController(FantaParcoRepository fantaParcoRepository) {
+    public FantaParcoController(@Qualifier("fantaParcoRepository") FantaParcoRepository fantaParcoRepository) {
         this.genericService = new GenericService<>(fantaParcoRepository);
     }
 

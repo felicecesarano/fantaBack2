@@ -8,6 +8,7 @@ import fantaParcoBack.service.EightBlackService;
 import fantaParcoBack.service.GenericService;
 import fantaParcoBack.service.StripeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,7 +37,7 @@ public class EightBlackController {
     private final GenericService<EightBlack, Long> genericService;
 
     @Autowired
-    public EightBlackController(EightBlackRepository eightBlackRepository) {
+    public EightBlackController(@Qualifier("eightBlackRepository") EightBlackRepository eightBlackRepository) {
         this.genericService = new GenericService<>(eightBlackRepository);
     }
 
