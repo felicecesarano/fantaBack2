@@ -10,10 +10,13 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("https://fantaparcodeiprincipi-51ffd.web.app", "https://fantaback2.onrender.com", "https://uptimerobot.com") // Aggiungi uptimerobot.com se è necessario
-                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                .allowedHeaders("*")
-                .allowCredentials(true);
-
+                .allowedOrigins(
+                        "https://fantaparcodeiprincipi-51ffd.web.app",
+                        "https://fantaback2.onrender.com",
+                        "https://uptimerobot.com") // Aggiungi uptimerobot.com
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // I metodi che permetti
+                .allowedHeaders("*") // Permetti tutte le intestazioni
+                .allowCredentials(false); // Non è necessario per UptimeRobot, quindi impostalo su false
     }
 }
+
