@@ -21,8 +21,10 @@ public class ClientController {
         List<Object> allClients = clientService.getAllClientsCombined();
         return ResponseEntity.ok(allClients);
     } // Endpoint per cercare i clienti per prefisso
+
     @GetMapping("/search")
     public ResponseEntity<List<Object>> searchClientsByPrefix(String prefix) {
         List<Object> matchingClients = clientService.searchClientsByPrefix(prefix);
         return ResponseEntity.ok(matchingClients);
-    }}
+    }
+}
