@@ -23,8 +23,8 @@ public class AuthController {
     private static final List<Login> fixedAdmins = Collections.unmodifiableList(
             List.of(
                     new Login("arpaia_nunzio@libero.it", "Allclient"),
-                    new Login("sperindeo_pasquale@gmail.com", "Allclient"),
-                    new Login("carfora_davide@gmail.com", "Allclient")
+                    new Login("pasquale.sperindeo.1996@gmail.com", "Allclient"),
+                    new Login("carfora89@gmail.com", "Allclient")
             )
     );
 

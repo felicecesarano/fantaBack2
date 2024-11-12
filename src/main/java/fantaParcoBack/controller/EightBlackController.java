@@ -5,6 +5,7 @@ import fantaParcoBack.entity.EightBlack;
 import fantaParcoBack.repository.EightBlackRepository;
 import fantaParcoBack.repository.FantaEightBlackRepository;
 import fantaParcoBack.service.EightBlackService;
+import fantaParcoBack.service.GenericService;
 import fantaParcoBack.service.StripeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +33,19 @@ public class EightBlackController {
     @Autowired
     private EightBlackService eightBlackService;
 
+    @Autowired
+    private GenericService<EightBlack, Long> genericService;
 
+    // Endpoint per eliminare un cliente (specifico per EightBlack)
+    @DeleteMapping("/clients/{clientId}")
+    public ResponseEntity<String> deleteClient(@PathVariable Long clientId) {
+        try {
+            genericService.deleteById(clientId); // Chiamata al servizio generico per eliminare l'entità
+            return ResponseEntity.ok("Cliente eliminato con successo.");
+        } catch (Exception e) {
+            return ResponseEntity.status(404).body("Errore: " + e.getMessage());
+        }
+    }
     // Endpoint per ottenere tutti i clienti
     @GetMapping("/clients")
     public ResponseEntity<List<EightBlack>> getAllClient() {
