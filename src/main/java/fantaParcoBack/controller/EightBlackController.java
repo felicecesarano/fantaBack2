@@ -33,14 +33,17 @@ public class EightBlackController {
     @Autowired
     private EightBlackService eightBlackService;
 
-    @Autowired
-    private GenericService<EightBlack, Long> genericService;
+    private final GenericService<EightBlack, Long> genericService;
 
-    // Endpoint per eliminare un cliente (specifico per EightBlack)
+    @Autowired
+    public EightBlackController(EightBlackRepository eightBlackRepository) {
+        this.genericService = new GenericService<>(eightBlackRepository);
+    }
+
     @DeleteMapping("/clients/{clientId}")
     public ResponseEntity<String> deleteClient(@PathVariable Long clientId) {
         try {
-            genericService.deleteById(clientId); // Chiamata al servizio generico per eliminare l'entità
+            genericService.deleteById(clientId);
             return ResponseEntity.ok("Cliente eliminato con successo.");
         } catch (Exception e) {
             return ResponseEntity.status(404).body("Errore: " + e.getMessage());

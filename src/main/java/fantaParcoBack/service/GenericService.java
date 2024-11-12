@@ -7,13 +7,17 @@ import org.springframework.stereotype.Service;
 @Service
 public class GenericService<T, ID> {
 
-    @Autowired
-    private JpaRepository<T, ID> repository;
+    private final JpaRepository<T, ID> repository;
+
+    // Usa il repository passato dal costruttore
+    public GenericService(JpaRepository<T, ID> repository) {
+        this.repository = repository;
+    }
 
     // Metodo generico per eliminare un'entità per ID
     public void deleteById(ID id) {
         if (repository.existsById(id)) {
-            repository.deleteById(id); // Elimina l'entità con ID specificato
+            repository.deleteById(id);
         } else {
             throw new RuntimeException("Entità con ID " + id + " non trovata.");
         }

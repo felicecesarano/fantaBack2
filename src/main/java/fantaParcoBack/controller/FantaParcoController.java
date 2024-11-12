@@ -33,14 +33,17 @@ public class FantaParcoController {
     @Autowired
     private FantaParcoService fantaParcoService;
 
-    @Autowired
-    private GenericService<EightBlack, Long> genericService;
+    private final GenericService<FantaParco, Long> genericService;
 
-    // Endpoint per eliminare un cliente (specifico per EightBlack)
+    @Autowired
+    public FantaParcoController(FantaParcoRepository fantaParcoRepository) {
+        this.genericService = new GenericService<>(fantaParcoRepository);
+    }
+
     @DeleteMapping("/clients/{clientId}")
     public ResponseEntity<String> deleteClient(@PathVariable Long clientId) {
         try {
-            genericService.deleteById(clientId); // Chiamata al servizio generico per eliminare l'entità
+            genericService.deleteById(clientId);
             return ResponseEntity.ok("Cliente eliminato con successo.");
         } catch (Exception e) {
             return ResponseEntity.status(404).body("Errore: " + e.getMessage());
