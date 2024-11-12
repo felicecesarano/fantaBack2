@@ -42,7 +42,7 @@ public class FantaEightBlackController {
     private final GenericService<FantaEightBlack, Long> genericService;
 
     @Autowired
-    public FantaEightBlackController(@Qualifier("fantaEightBlackRepository") FantaEightBlackRepository fantaEightBlackRepository) {
+    public FantaEightBlackController(FantaEightBlackRepository fantaEightBlackRepository) {
         this.genericService = new GenericService<>(fantaEightBlackRepository);
     }
 

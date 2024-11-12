@@ -37,7 +37,7 @@ public class EightBlackController {
     private final GenericService<EightBlack, Long> genericService;
 
     @Autowired
-    public EightBlackController(@Qualifier("eightBlackRepository") EightBlackRepository eightBlackRepository) {
+    public EightBlackController(EightBlackRepository eightBlackRepository) {
         this.genericService = new GenericService<>(eightBlackRepository);
     }
 

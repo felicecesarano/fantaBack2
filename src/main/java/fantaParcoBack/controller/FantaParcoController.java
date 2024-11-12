@@ -37,7 +37,7 @@ public class FantaParcoController {
     private final GenericService<FantaParco, Long> genericService;
 
     @Autowired
-    public FantaParcoController(@Qualifier("fantaParcoRepository") FantaParcoRepository fantaParcoRepository) {
+    public FantaParcoController(FantaParcoRepository fantaParcoRepository) {
         this.genericService = new GenericService<>(fantaParcoRepository);
     }
 
