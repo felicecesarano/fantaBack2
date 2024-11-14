@@ -78,6 +78,7 @@ public class EightBlackController {
         metadata.put("first_name", paymentDTO.getFirstName());
         metadata.put("last_name", paymentDTO.getLastName());
         metadata.put("email2", paymentDTO.getEmail2());
+        metadata.put("product_name", paymentDTO.getProductName());
         metadata.put("amount", String.valueOf(paymentDTO.getAmount()));
 
         String paymentUrl;
@@ -102,6 +103,7 @@ public class EightBlackController {
         eightBlack.setNome(paymentDTO.getFirstName());
         eightBlack.setCognome(paymentDTO.getLastName());
         eightBlack.setSkillBol(paymentDTO.getEmail2());
+
         eightBlack.setTotaleSpeso(paymentDTO.getAmount());
 
         eightBlackRepository.save(eightBlack);

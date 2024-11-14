@@ -88,6 +88,7 @@ public class FantaParcoController {
         metadata.put("birth_date", paymentDTO.getBirthDate());
         metadata.put("location", paymentDTO.getLocation());
         metadata.put("cellphone", paymentDTO.getCellphone());
+        metadata.put("product_name", paymentDTO.getProductName());
         metadata.put("amount", String.valueOf(paymentDTO.getAmount()));
 
         String paymentUrl;
