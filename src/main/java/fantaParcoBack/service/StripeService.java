@@ -22,6 +22,10 @@ public class StripeService {
     }
 
     public Session createCheckoutSession(String currency, long amount, String successUrl, String cancelUrl, Map<String, String> metadata) throws StripeException {
+        // Recupera il nome del prodotto dai metadati (se presente)
+        String productName = metadata.getOrDefault("product_name", "Prodotto da pagare"); // Usa il valore del metadato "product_name"
+
+        // Crea i parametri della sessione di checkout
         SessionCreateParams params = SessionCreateParams.builder()
                 .setMode(SessionCreateParams.Mode.PAYMENT)
                 .setSuccessUrl(successUrl)
@@ -32,7 +36,7 @@ public class StripeService {
                                 .setUnitAmount(amount)
                                 .setProductData(
                                         SessionCreateParams.LineItem.PriceData.ProductData.builder()
-                                                .setName("Prodotto da pagare")
+                                                .setName(productName) // Usa il nome del prodotto recuperato dai metadati
                                                 .build())
                                 .build())
                         .setQuantity(1L)
@@ -40,6 +44,7 @@ public class StripeService {
                 .putAllMetadata(metadata) // Aggiungi i metadati qui
                 .build();
 
+        // Crea e restituisci la sessione di checkout
         return Session.create(params);
     }
 }
