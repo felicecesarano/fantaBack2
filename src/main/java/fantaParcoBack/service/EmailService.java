@@ -36,5 +36,9 @@ public class EmailService {
 
         emailSender.send(message);
     }
+<<<<<<< HEAD
 }
 
+=======
+}
+>>>>>>> 70227bec626f152344a28a28328707c10f52e260
