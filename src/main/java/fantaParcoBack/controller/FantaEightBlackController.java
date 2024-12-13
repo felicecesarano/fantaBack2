@@ -104,7 +104,7 @@ public class FantaEightBlackController {
 
         try {
             paymentUrl = stripeService.createCheckoutSession("eur", paymentDTO.getAmount(),
-                    "http://fantaparcodeiprincipi-51ffd.web.app/success", "http://fantaparcodeiprincipi-51ffd.web.app/cancel", metadata).getUrl();
+                    "http://fantaparcodeiprincipi.it/success?session_id={CHECKOUT_SESSION_ID}", "http://fantaparcodeiprincipi.it/cancel", metadata).getUrl();
         } catch (Exception e) {
             return ResponseEntity.status(500).body(Map.of("error", "Impossibile creare la sessione di pagamento: " + e.getMessage()));
         }
